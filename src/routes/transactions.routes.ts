@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { getCustomRepository } from 'typeorm';
+import { promises } from 'fs';
 import upload from '../config/upload';
 
 import TransactionsRepository from '../repositories/TransactionsRepository';
@@ -12,18 +13,7 @@ const transactionsRouter = Router();
 transactionsRouter.get('/', async (request, response) => {
   const transactionsRepository = getCustomRepository(TransactionsRepository);
   const balance = await transactionsRepository.getBalance();
-  const transactions = balance.transactions.map(transaction => {
-    const {
-      id,
-      title,
-      value,
-      type,
-      category,
-      created_at,
-      updated_at,
-    } = transaction;
-    return { id, title, value, type, category, created_at, updated_at };
-  });
+  const { transactions } = balance;
   delete balance.transactions;
 
   response.json({ transactions, balance });
@@ -57,7 +47,8 @@ transactionsRouter.post(
     const { file } = request;
     const importTransactionsService = new ImportTransactionsService();
     const transactions = await importTransactionsService.execute({ file });
-    return response.json(transactions);
+    await promises.unlink(file.path);
+    response.json(transactions);
   },
 );
 
