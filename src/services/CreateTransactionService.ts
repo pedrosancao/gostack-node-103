@@ -29,9 +29,11 @@ class CreateTransactionService {
     if (['income', 'outcome'].indexOf(type) < 0) {
       throw Error('Invalid transaction type');
     }
-    const { total } = await this.transactionsRepository.getBalance();
-    if (type === 'outcome' && value > total) {
-      throw new AppError('Insuficient funds.');
+    if (type === 'outcome') {
+      const { total } = await this.transactionsRepository.getBalance();
+      if (value > total) {
+        throw new AppError('Insuficient funds.');
+      }
     }
 
     let existingCategory = await this.categoriesRepository.findOne({
