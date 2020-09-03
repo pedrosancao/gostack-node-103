@@ -6,7 +6,10 @@
 
 Challenge for Node.js second module on Rocketseat's GoStack Online Bootcamp.
 
-This is a sample project to store and list transactions and compute balance using PostgreSQL database.
+This is a sample project to store and list transactions and compute balance using PostgreSQL
+database and are related to:
+
+- [pedrosancao/gostack-reactjs-102](https://github.com/pedrosancao/gostack-reactjs-102)
 
 Using Test-Driven Development practice all automated tests are provided and students
 must make them pass.
